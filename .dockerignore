@@ -1,0 +1,11 @@
+.git
+.gitignore
+bin/
+vendor/
+data/
+*.db
+.idea/
+.vscode/
+Jenkinsfile
+go.work
+go.work.sum
