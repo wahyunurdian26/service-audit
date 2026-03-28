@@ -9,7 +9,7 @@ require (
 	github.com/rabbitmq/amqp091-go v1.10.0
 	go.uber.org/mock v0.6.0
 	google.golang.org/grpc v1.79.3
-	microservice/util v0.0.0-00010101000000-000000000000
+	github.com/wahyunurdian26/util v0.0.1
 )
 
 require (
@@ -30,4 +30,3 @@ require (
 	google.golang.org/protobuf v1.36.11 // indirect
 )
 
-replace microservice/util => ../util
