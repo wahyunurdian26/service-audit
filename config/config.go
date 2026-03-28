@@ -21,10 +21,10 @@ type DBConfiguration struct {
 func LoadConfigs() Config {
 	return Config{
 		MessageBrokerConfig: MessageBrokerConfig{
-			RabbitMQUrl: config.Get(constanta.RabbitMqUrl, "amqp://guest:guest@localhost:5672/"),
+			RabbitMQUrl: config.Get(constanta.RabbitMqUrl, "amqp://guest:guest@rabbitmq:5672/"),
 		},
 		DBConfiguration: DBConfiguration{
-			DatabaseUrl: config.Get(constanta.DatabaseUrl, "postgres://postgres:postgres@localhost:5432/omnipay_db?sslmode=disable"),
+			DatabaseUrl: config.Get(constanta.DatabaseUrl, "postgres://postgres:postgres@postgres-audit:5432/omnipay_db?sslmode=disable"),
 		},
 	}
 }
