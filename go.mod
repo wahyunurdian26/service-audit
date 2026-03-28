@@ -7,7 +7,7 @@ require (
 	github.com/jackc/pgx/v5 v5.9.1
 	github.com/joho/godotenv v1.5.1
 	github.com/rabbitmq/amqp091-go v1.10.0
-	github.com/wahyunurdian26/util v0.0.1
+	github.com/wahyunurdian26/util v0.0.2-0.20260328160208-ff98629b068d
 	go.uber.org/mock v0.6.0
 	google.golang.org/grpc v1.79.3
 )
