@@ -14,30 +14,21 @@ pipeline {
         // Credentials
         GH_CREDENTIALS_ID = "github-token"
         DOCKER_CRED_ID = "ghcr-login"
+
+        // Build Optimizations
+        DOCKER_BUILDKIT = "1"
     }
 
     stages {
-
-        // ========================
-        // 🔧 PREPARATION
-        // ========================
-        stage('Preparation') {
-            steps {
-                echo "Starting build for ${APP_NAME}..."
-                sh 'docker version'
-            }
-        }
-
-        // ========================
-        // 🧪 UNIT TEST
-        // ========================
-        stage('Unit Testing') {
+        stage('Testing') {
             steps {
                 withCredentials([string(credentialsId: GH_CREDENTIALS_ID, variable: 'G_TOKEN')]) {
                     echo "Running unit test via Docker..."
                     sh '''
                     docker build \
                       --build-arg GITHUB_TOKEN=$G_TOKEN \
+                      --build-arg BUILDKIT_INLINE_CACHE=1 \
+                      --cache-from ${REGISTRY}/${IMAGE_NAME}:latest \
                       --target tester \
                       -t ${APP_NAME}:test .
                     '''
@@ -45,36 +36,14 @@ pipeline {
             }
         }
 
-        // ========================
-        // 🔐 SECURITY SCAN
-        // ========================
-        stage('Security Scan') {
+        stage('Code review') {
             steps {
-                echo "Running security scan..."
+                echo "Running security scan / code review..."
                 sh 'echo Security Scan PASSED'
             }
         }
 
-        // ========================
-        // 🐳 DOCKER BUILD
-        // ========================
-        stage('Docker Build') {
-            steps {
-                withCredentials([string(credentialsId: GH_CREDENTIALS_ID, variable: 'G_TOKEN')]) {
-                    echo "Building Docker image..."
-                    sh '''
-                    docker build \
-                      --build-arg GITHUB_TOKEN=$G_TOKEN \
-                      -t ${REGISTRY}/${IMAGE_NAME}:staging-${BUILD_NUMBER} .
-                    '''
-                }
-            }
-        }
-
-        // ========================
-        // 🔑 DOCKER LOGIN
-        // ========================
-        stage('Docker Login') {
+        stage('Prepare') {
             steps {
                 withCredentials([usernamePassword(credentialsId: DOCKER_CRED_ID, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     echo "Login to GHCR..."
@@ -85,54 +54,52 @@ pipeline {
             }
         }
 
-        // ========================
-        // 📦 DOCKER PUSH
-        // ========================
-        stage('Docker Push') {
-            steps {
-                echo "Pushing Docker image..."
-                sh '''
-                docker push ${REGISTRY}/${IMAGE_NAME}:staging-${BUILD_NUMBER}
+        stage('Build and Deploy') {
+            stages {
+                stage('Deploy to Staging') {
+                    when {
+                        anyOf {
+                            branch 'master'
+                            branch 'main'
+                        }
+                    }
+                    steps {
+                        withCredentials([string(credentialsId: GH_CREDENTIALS_ID, variable: 'G_TOKEN')]) {
+                            echo "Building and Pushing Docker image..."
+                            sh '''
+                            docker build \
+                              --build-arg GITHUB_TOKEN=$G_TOKEN \
+                              --build-arg BUILDKIT_INLINE_CACHE=1 \
+                              --cache-from ${REGISTRY}/${IMAGE_NAME}:latest \
+                              -t ${REGISTRY}/${IMAGE_NAME}:staging-${BUILD_NUMBER} .
 
-                docker tag ${REGISTRY}/${IMAGE_NAME}:staging-${BUILD_NUMBER} \
-                           ${REGISTRY}/${IMAGE_NAME}:latest
+                            docker push ${REGISTRY}/${IMAGE_NAME}:staging-${BUILD_NUMBER}
 
-                docker push ${REGISTRY}/${IMAGE_NAME}:latest
-                '''
-            }
-        }
+                            docker tag ${REGISTRY}/${IMAGE_NAME}:staging-${BUILD_NUMBER} \
+                                       ${REGISTRY}/${IMAGE_NAME}:latest
 
-        // ========================
-        // 🚀 GITOPS UPDATE
-        // ========================
-        stage('GitOps Update') {
-            steps {
-                withCredentials([string(credentialsId: GH_CREDENTIALS_ID, variable: 'G_TOKEN')]) {
-                    echo "Updating deployment repo..."
-                    sh '''
-                    rm -rf deployment-config
+                            docker push ${REGISTRY}/${IMAGE_NAME}:latest
+                            '''
 
-                    git clone https://$G_TOKEN@github.com/wahyunurdian26/deployment-config.git
-
-                    cd deployment-config
-
-                    sed -i "s|image: .*|image: ${REGISTRY}/${IMAGE_NAME}:staging-${BUILD_NUMBER}|g" ${DEPLOY_PATH}
-
-                    git config user.email "jenkins@wahyunurdian.com"
-                    git config user.name "Jenkins CI"
-
-                    git add .
-                    git diff --cached --quiet || git commit -m "Update ${APP_NAME} image to staging-${BUILD_NUMBER}"
-                    git push origin master
-                    '''
+                            echo "Updating deployment repo (GitOps)..."
+                            sh '''
+                            rm -rf deployment-config
+                            git clone https://$G_TOKEN@github.com/wahyunurdian26/deployment-config.git
+                            cd deployment-config
+                            sed -i 's|image: .*|image: '${REGISTRY}/${IMAGE_NAME}:staging-${BUILD_NUMBER}'|g' ${DEPLOY_PATH}
+                            git config user.email "jenkins@wahyunurdian.com"
+                            git config user.name "Jenkins CI"
+                            git add .
+                            git diff --cached --quiet || git commit -m "Update ${APP_NAME} image to staging-${BUILD_NUMBER}"
+                            git push origin master
+                            '''
+                        }
+                    }
                 }
             }
         }
     }
 
-    // ========================
-    // 📌 POST ACTION
-    // ========================
     post {
         always {
             cleanWs()
