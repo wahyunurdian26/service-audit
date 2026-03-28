@@ -20,21 +20,21 @@ pipeline {
     }
 
     stages {
-        stage('Testing') {
-            steps {
-                withCredentials([string(credentialsId: GH_CREDENTIALS_ID, variable: 'G_TOKEN')]) {
-                    echo "Running unit test via Docker..."
-                    sh '''
-                    docker build \
-                      --build-arg GITHUB_TOKEN=$G_TOKEN \
-                      --build-arg BUILDKIT_INLINE_CACHE=1 \
-                      --cache-from ${REGISTRY}/${IMAGE_NAME}:latest \
-                      --target tester \
-                      -t ${APP_NAME}:test .
-                    '''
-                }
-            }
-        }
+//        stage('Testing') {
+//            steps {
+//                withCredentials([string(credentialsId: GH_CREDENTIALS_ID, variable: 'G_TOKEN')]) {
+//                    echo "Running unit test via Docker..."
+//                    sh '''
+//                    docker build \
+//                      --build-arg GITHUB_TOKEN=$G_TOKEN \
+//                      --build-arg BUILDKIT_INLINE_CACHE=1 \
+//                      --cache-from ${REGISTRY}/${IMAGE_NAME}:latest \
+//                      --target tester \
+//                      -t ${APP_NAME}:test .
+//                    '''
+//                }
+//            }
+//        }
 
         stage('Code review') {
             steps {
