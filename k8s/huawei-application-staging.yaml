@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: audit-service-staging
+  labels:
+    env: staging
+    project: microservices
+    cloud: huawei
+spec:
+  destination:
+    namespace: microservices
+    name: in-cluster
+  project: default
+  source:
+    repoURL: git@github.com:wahyunurdian26/omnipay-deployment.git
+    targetRevision: main
+    path: omnipay/hcloud/omnipay-manifests/overlays/staging/audit-service
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
