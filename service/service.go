@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"microservice/audit-service/model"
-	"microservice/audit-service/repository"
+	"github.com/wahyunurdian26/service-audit/model"
+	"github.com/wahyunurdian26/service-audit/repository"
 )
 
 type AuditService interface {

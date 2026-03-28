@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"microservice/audit-service/model"
+	"github.com/wahyunurdian26/service-audit/model"
 )
 
 var (

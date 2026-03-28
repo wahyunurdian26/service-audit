@@ -11,7 +11,7 @@ package mock
 
 import (
 	context "context"
-	model "microservice/audit-service/model"
+	model "github.com/wahyunurdian26/service-audit/model"
 	reflect "reflect"
 
 	gomock "go.uber.org/mock/gomock"

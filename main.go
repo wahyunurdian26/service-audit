@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"microservice/audit-service/transport"
+	"github.com/wahyunurdian26/service-audit/transport"
 
 	_ "github.com/joho/godotenv/autoload"
 )

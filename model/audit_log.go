@@ -2,7 +2,7 @@ package model
 
 import (
 	"time"
-	"microservice/util/audit"
+	"github.com/wahyunurdian26/util/audit"
 )
 
 type AuditLog struct {

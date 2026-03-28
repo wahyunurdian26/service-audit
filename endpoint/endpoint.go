@@ -5,8 +5,8 @@ import (
 	"math"
 
 	"github.com/go-kit/kit/endpoint"
-	"microservice/audit-service/model"
-	"microservice/audit-service/service"
+	"github.com/wahyunurdian26/service-audit/model"
+	"github.com/wahyunurdian26/service-audit/service"
 )
 
 type AuditEndpoints struct {

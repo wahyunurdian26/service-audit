@@ -7,10 +7,10 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	amqp "github.com/rabbitmq/amqp091-go"
 
-	"microservice/audit-service/endpoint"
-	"microservice/audit-service/repository/postgres"
-	"microservice/audit-service/service"
-	"microservice/audit-service/config"
+	"github.com/wahyunurdian26/service-audit/endpoint"
+	"github.com/wahyunurdian26/service-audit/repository/postgres"
+	"github.com/wahyunurdian26/service-audit/service"
+	"github.com/wahyunurdian26/service-audit/config"
 )
 
 type AmqpServer struct {

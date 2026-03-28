@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"microservice/audit-service/mock"
-	"microservice/audit-service/model"
+	"github.com/wahyunurdian26/service-audit/mock"
+	"github.com/wahyunurdian26/service-audit/model"
 	"go.uber.org/mock/gomock"
 )
 

@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	
-	"microservice/audit-service/model"
-	uLog "microservice/util/logger"
+	"github.com/wahyunurdian26/service-audit/model"
+	uLog "github.com/wahyunurdian26/util/logger"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

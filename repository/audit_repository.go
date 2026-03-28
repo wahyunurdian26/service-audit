@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"microservice/audit-service/model"
+	"github.com/wahyunurdian26/service-audit/model"
 )
 
 type AuditRepository interface {

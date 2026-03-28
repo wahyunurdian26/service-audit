@@ -6,8 +6,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"microservice/audit-service/model"
-	uLog "microservice/util/logger"
+	"github.com/wahyunurdian26/service-audit/model"
+	uLog "github.com/wahyunurdian26/util/logger"
 )
 
 func (s *auditService) RecordEvent(ctx context.Context, log *model.AuditLog) error {

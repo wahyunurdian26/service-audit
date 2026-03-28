@@ -1,8 +1,8 @@
 package config
 
 import (
-	"microservice/util/config"
-	"microservice/util/constanta"
+	"github.com/wahyunurdian26/util/config"
+	"github.com/wahyunurdian26/util/constanta"
 )
 
 type Config struct {

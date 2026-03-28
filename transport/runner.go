@@ -8,10 +8,10 @@ import (
 	"syscall"
 	"time"
 
-	"microservice/audit-service/model"
-	"microservice/util/audit"
-	"microservice/util/logger"
-	"microservice/util/requestid"
+	"github.com/wahyunurdian26/service-audit/model"
+	"github.com/wahyunurdian26/util/audit"
+	"github.com/wahyunurdian26/util/logger"
+	"github.com/wahyunurdian26/util/requestid"
 )
 
 func (s *AmqpServer) Run() {

@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"os"
 
-	"microservice/audit-service/endpoint"
-	"microservice/util/logger"
-	"microservice/util/model"
-	"microservice/util/requestid"
+	"github.com/wahyunurdian26/service-audit/endpoint"
+	"github.com/wahyunurdian26/util/logger"
+	"github.com/wahyunurdian26/util/model"
+	"github.com/wahyunurdian26/util/requestid"
 
 	httptransport "github.com/go-kit/kit/transport/http"
 )
@@ -19,7 +19,7 @@ func RegisterHTTPServer(endpoints endpoint.AuditEndpoints, port string) {
 	options := []httptransport.ServerOption{
 		httptransport.ServerErrorEncoder(encodeError),
 		httptransport.ServerBefore(func(ctx context.Context, request *http.Request) context.Context {
-			return requestid.MiddlewareRequestIdHTTP(request)
+			return requestid.MiddlewareRequestId(ctx, nil)
 		}),
 	}
 

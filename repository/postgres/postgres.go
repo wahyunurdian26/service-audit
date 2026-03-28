@@ -3,8 +3,8 @@ package postgres
 import (
 	"context"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"microservice/audit-service/repository"
-	"microservice/util/logger"
+	"github.com/wahyunurdian26/service-audit/repository"
+	"github.com/wahyunurdian26/util/logger"
 )
 
 const (
