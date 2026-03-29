@@ -58,9 +58,10 @@ pipeline {
             stages {
                 stage('Deploy to Staging') {
                     when {
-                        anyOf {
-                            branch 'master'
-                            branch 'main'
+                        expression {
+                            return env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'main' ||
+                                   env.GIT_BRANCH == 'master' || env.GIT_BRANCH == 'main' ||
+                                   env.GIT_BRANCH == 'origin/master' || env.GIT_BRANCH == 'origin/main'
                         }
                     }
                     steps {
